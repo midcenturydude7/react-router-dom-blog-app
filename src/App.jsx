@@ -1,7 +1,14 @@
+// React imports
 import React from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
+// Primary layout component imports
 import Layout from "./components/Layout";
+import Header from "./components/Header";
+import Nav from "./components/Nav";
+import Footer from "./components/Footer";
+
+// Secondary component (pages) imports
 import Home from "./components/Home";
 import NewPost from "./components/NewPost";
 import PostPage from "./components/PostPage";
