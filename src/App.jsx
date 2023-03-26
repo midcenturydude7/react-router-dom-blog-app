@@ -2,6 +2,10 @@
 import React from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
+// Custom hooks imports
+import useWindowSize from "./hooks/useWindowSize";
+import useAxiosFetch from "./hooks/useAxiosFetch";
+
 // API import
 import api from "./api/posts";
 
@@ -27,28 +31,39 @@ function App() {
   const [posts, setPosts] = React.useState([]);
   const [editTitle, setEditTitle] = React.useState("");
   const [editBody, setEditBody] = React.useState("");
+
   const navigate = useNavigate();
+  const { width } = useWindowSize();
+  const { data, fetchError, isLoading } = useAxiosFetch(
+    "http://localhost:3500/posts"
+  );
 
+  // Custom hook API call
   React.useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await api.get("/posts");
-        setPosts(response.data);
-      } catch (err) {
-        if (err.response) {
-          // Not in the 200 response range
-          console.log(err.response.data);
-          console.log(err.response.status);
-          console.log(err.response.headers);
-        } else {
-          // 404
-          console.log(`Error: ${err.message}`);
-        }
-      }
-    };
+    setPosts(data);
+  }, [data]);
 
-    fetchPosts();
-  }, []);
+  // Inline API Call
+  // React.useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     try {
+  //       const response = await api.get("/posts");
+  //       setPosts(response.data);
+  //     } catch (err) {
+  //       if (err.response) {
+  //         // Not in the 200 response range
+  //         console.log(err.response.data);
+  //         console.log(err.response.status);
+  //         console.log(err.response.headers);
+  //       } else {
+  //         // 404
+  //         console.log(`Error: ${err.message}`);
+  //       }
+  //     }
+  //   };
+
+  //   fetchPosts();
+  // }, []);
 
   React.useEffect(() => {
     const filteredResults = posts.filter(
@@ -109,8 +124,19 @@ function App() {
     <Routes>
       <Route
         path="/"
-        element={<Layout search={search} setSearch={setSearch} />}>
-        <Route index element={<Home posts={searchResults} />} />
+        element={
+          <Layout search={search} setSearch={setSearch} width={width} />
+        }>
+        <Route
+          index
+          element={
+            <Home
+              posts={searchResults}
+              fetchError={fetchError}
+              isLoading={isLoading}
+            />
+          }
+        />
         <Route path="post">
           <Route
             index
