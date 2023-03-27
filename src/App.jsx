@@ -1,7 +1,6 @@
 // React imports
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { DataProvider } from "./context/DataContext";
 
 // Primary layout component imports
 import Layout from "./components/Layout";
@@ -16,22 +15,20 @@ import Missing from "./components/Missing";
 
 function App() {
   return (
-    <DataProvider>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="post">
-            <Route index element={<NewPost />} />
-            <Route path=":id" element={<PostPage />} />
-          </Route>
-          <Route path="edit">
-            <Route path=":id" element={<EditPost />} />
-          </Route>
-          <Route path="about" element={<About />} />
-          <Route path="*" element={<Missing />} />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="post">
+          <Route index element={<NewPost />} />
+          <Route path=":id" element={<PostPage />} />
         </Route>
-      </Routes>
-    </DataProvider>
+        <Route path="edit">
+          <Route path=":id" element={<EditPost />} />
+        </Route>
+        <Route path="about" element={<About />} />
+        <Route path="*" element={<Missing />} />
+      </Route>
+    </Routes>
   );
 }
 
