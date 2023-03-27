@@ -1,29 +1,20 @@
 // React imports
 import React from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-
-// Custom hooks imports
-import useWindowSize from "./hooks/useWindowSize";
-import useAxiosFetch from "./hooks/useAxiosFetch";
+import { useNavigate } from "react-router-dom";
 
 // API import
-import api from "./api/posts";
+import api from "../api/posts";
 
 // Date format dependency
 import { format } from "date-fns";
 
-// Primary layout component imports
-import Layout from "./components/Layout";
+// Custom hooks imports
+import useWindowSize from "../hooks/useWindowSize";
+import useAxiosFetch from "../hooks/useAxiosFetch";
 
-// Secondary component (pages) imports
-import Home from "./components/Home";
-import NewPost from "./components/NewPost";
-import PostPage from "./components/PostPage";
-import EditPost from "./components/EditPost";
-import About from "./components/About";
-import Missing from "./components/Missing";
+const DataContext = React.createContext({});
 
-function App() {
+export const DataProvider = ({ children }) => {
   const [search, setSearch] = React.useState("");
   const [searchResults, setSearchResults] = React.useState([]);
   const [postTitle, setPostTitle] = React.useState("");
@@ -121,23 +112,30 @@ function App() {
   };
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={<Layout search={search} setSearch={setSearch} />}>
-        <Route index element={<Home />} />
-        <Route path="post">
-          <Route index element={<NewPost />} />
-          <Route path=":id" element={<PostPage />} />
-        </Route>
-        <Route path="edit">
-          <Route path=":id" element={<EditPost />} />
-        </Route>
-        <Route path="about" element={<About />} />
-        <Route path="*" element={<Missing />} />
-      </Route>
-    </Routes>
+    <DataContext.Provider
+      value={{
+        width,
+        search,
+        setSearch,
+        searchResults,
+        fetchError,
+        isLoading,
+        handleSubmit,
+        postTitle,
+        setPostTitle,
+        postBody,
+        setPostBody,
+        posts,
+        handleEdit,
+        editBody,
+        setEditBody,
+        editTitle,
+        setEditTitle,
+        handleDelete,
+      }}>
+      {children}
+    </DataContext.Provider>
   );
-}
+};
 
-export default App;
+export default DataContext;
