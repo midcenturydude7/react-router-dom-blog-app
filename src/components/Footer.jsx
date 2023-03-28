@@ -5,10 +5,12 @@ function Footer() {
   const postCount = useStoreState((state) => state.postCount);
   return (
     <footer className="Footer">
-      {postCount.length ? (
+      {postCount === 1 ? (
+        <p>{postCount} blog post</p>
+      ) : postCount > 1 ? (
         <p>{postCount} blog posts</p>
       ) : (
-        <p>You have no blog entries yet!</p>
+        <p>You have not blog entries yet!</p>
       )}
     </footer>
   );
