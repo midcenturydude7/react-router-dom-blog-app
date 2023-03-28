@@ -1,6 +1,9 @@
 // React imports
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import { useStoreActions } from "easy-peasy";
+
+import useAxiosFetch from "./hooks/useAxiosFetch";
 
 // Primary layout component imports
 import Layout from "./components/Layout";
@@ -14,10 +17,24 @@ import About from "./components/About";
 import Missing from "./components/Missing";
 
 function App() {
+  const setPosts = useStoreActions((actions) => actions.setPosts);
+
+  const { data, fetchError, isLoading } = useAxiosFetch(
+    "http://localhost:3500/posts"
+  );
+
+  // Custom hook API call
+  React.useEffect(() => {
+    setPosts(data);
+  }, [data, setPosts]);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
+        <Route
+          index
+          element={<Home isLoading={isLoading} fetchError={fetchError} />}
+        />
         <Route path="post">
           <Route index element={<NewPost />} />
           <Route path=":id" element={<PostPage />} />

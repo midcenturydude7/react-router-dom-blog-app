@@ -1,5 +1,4 @@
 import React from "react";
-import { DataProvider } from "../context/DataContext";
 import Header from "./Header";
 import Nav from "./Nav";
 import Footer from "./Footer";
@@ -9,11 +8,9 @@ function Layout() {
   return (
     <div className="App">
       <Header title="React JS Blog App" />
-      <DataProvider>
-        <Nav />
-        <Outlet />
-        <Footer />
-      </DataProvider>
+      <Nav />
+      <Outlet />
+      <Footer />
     </div>
   );
 }
